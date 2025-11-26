@@ -21,6 +21,8 @@ def get_fact_sales():
         "Order ID",
         "Customer ID",
         "Product ID",
+        # Adding product to create product_id foreign key
+        "Product Name",
         "Order Date",
         "Ship Date",
         "Ship Mode",
@@ -41,6 +43,7 @@ def get_fact_sales():
         "Order ID": "order_id",
         "Customer ID": "customer_id",
         "Product ID": "product_id",
+        "Product Name": "product_name",
         "Order Date": "order_date",
         "Ship Date": "ship_date",
         "Ship Mode": "ship_mode",
@@ -62,15 +65,21 @@ def get_fact_sales():
         fact_sales['state'].astype(str)
     )    
 
-    # Eliminating the now redundant columns used to create geo_id
-    fact_sales.drop(columns=['postal_code', 'city', 'state'], inplace=True)
+    # Creating a product key by combining product_id and product_name
+    fact_sales['product_key'] = (
+        fact_sales['product_id'].astype(str) + '-' + 
+        fact_sales['product_name'].astype(str)
+    )     
+
+    # Eliminating the now redundant columns used to create foreign keys
+    fact_sales.drop(columns=['postal_code', 'city', 'state', 'product_name', 'product_id'], inplace=True)
 
     # Enforcing data types
     fact_sales = fact_sales.astype({
         "row_id": "string",
         "order_id": "string",
         "customer_id": "string",
-        "product_id": "string",
+        "product_key": "string",
         "geo_id": "string",
         "ship_mode": "string",
         "quantity": "int"
@@ -86,7 +95,7 @@ def get_fact_sales():
             "row_id",
             "order_id",
             "customer_id",
-            "product_id",
+            "product_key",
             "geo_id",
             "order_date",
             "ship_date",
@@ -105,3 +114,5 @@ def get_fact_sales():
     print(f"Processed rows: {len(fact_sales)}")
 
     return fact_sales 
+
+# get_fact_sales().to_excel('fact_sales_output.xlsx', index=False)

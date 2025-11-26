@@ -34,6 +34,10 @@ def get_dim_customer():
 
     print(dim_customer.info())
     print(dim_customer.head())
-    print(f"Processed rows: {len(dim_customer)}") # I added a print statement to show the number of processed rows, which can be useful for debugging and verification.
+
+    # I added a print statement to show the number of processed rows, which can be useful for debugging and verification.
+    print(f"Processed rows: {len(dim_customer)}")
 
     return dim_customer 
+
+# get_dim_customer().to_excel('dim_customer_output.xlsx', index=False)
