@@ -1,0 +1,1 @@
+create schema if not EXISTS wf_challenge;
